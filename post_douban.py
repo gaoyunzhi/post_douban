@@ -4,7 +4,7 @@
 import time
 import plain_db
 import webgram
-import export_to_telegraph
+import requests
 
 with open('cookie') as f:
     cookie = f.read().strip()
@@ -31,10 +31,15 @@ def getPosts(channel):
                 yield item['href']
                 break
 
-def post():
+def post(status):
     headers['method'] = headers.get('method', 'GET')
     headers['accept'] = headers.get('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/apng,*/*;q=0.8,application/signed-exchange;v=b3')
     headers['user-agent'] = headers.get('user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36')
+    headers['cookie'] = cookie
+    headers['referer'] = 'https://www.douban.com'
+    result = requests.post('https://www.douban.com/j/status/reshare', headers=headers, data={
+        'sid': status, 'ck': '3DCH', 'text': ''}) 
+    print(result)
     
 def run():
     for post in getPosts('douban_read'):
