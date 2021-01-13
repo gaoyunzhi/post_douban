@@ -40,11 +40,9 @@ def postDouban(status):
     headers['referer'] = 'https://www.douban.com'
     result = requests.post('https://www.douban.com/j/status/reshare', headers=headers, data={
         'sid': status, 'ck': '3DCH', 'text': ''}) 
-    print(result)
     
 def run():
     for post in getPosts('douban_read'):
-        print(post)
         if existing.get(post):
             continue
         if 'status' not in post:
