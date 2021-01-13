@@ -1,0 +1,1 @@
+Auto post to douban. Will add detail if more than 10 people star the repository.
