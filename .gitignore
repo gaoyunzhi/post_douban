@@ -4,3 +4,6 @@
 *nohup*
 *existing*
 *cookie*
+*auth_token*
+*request_body_template*
+*session_file*
