@@ -98,20 +98,19 @@ def postMedia(fn):
     # headers_copy['Content-Type'] = "multipart/form-data; boundary=----WebKitFormBoundaryqvxBU8yBTb28YrZ8"
     # print(request_body_template % fn[4:])
     fields = {
-        'file': (fn[4:], open(fn, 'rb'), "image/" + fn.split('.')[-1]),
+        'image': (fn[4:], open(fn, 'rb').read(), "image/" + fn.split('.')[-1]),
         'ck': "3DCH",
         'upload_auth_token': auth_token,
     }
     boundary = '----WebKitFormBoundaryqvxBU8yBTb28YrZ8'
     m = MultipartEncoder(fields=fields, boundary=boundary)
+    print(m)
 
     headers_copy['Content-Type'] = m.content_type
 
     result = requests.post('https://www.douban.com/j/upload', 
         headers=headers_copy, 
-        data=request_body_template % fn[4:], 
-        files={'image': (fn[4:], open(fn, 'rb'), 'image/jpeg'),
-        'ck': '3DCH', 'upload_auth_token': auth_token})
+        data=m)
     print(result.content)
     print(result.text)
     print(result.json)
