@@ -46,16 +46,14 @@ def getPosts(channel):
 def getLinkReplace(url, album):
     if 'telegra.ph' in url and 'douban.com/note/' in album.cap_html:
         return ''
-    if 'douban.com/' in url:
-        return '\n\n' + url
     if 'telegra.ph' in url:
         soup = BeautifulSoup(cached_url.get(url, force_cache=True), 'html.parser')
         title = export_to_telegraph.getTitle(url)
         try:
-            return title + ' ' + soup.find('address').find('a')['href']
+            return '\n\n【%s】 %s' % (title, soup.find('address').find('a')['href'])
         except:
             return ''
-    return url
+    return '\n\n' + url
 
 def getText(album, post):
     soup = BeautifulSoup(album.cap_html, 'html.parser')
