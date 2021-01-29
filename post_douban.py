@@ -180,7 +180,7 @@ async def post_douban(channel, post, album, status_text):
         return
     result = requests.post('https://www.douban.com/', headers=headers, data={
         'uploaded': '|'.join(media_ids), 'ck': '3DCH', 'comment': status_text}) 
-    print(result)
+    result = result.status_code
     return result
     
 async def run():
@@ -195,13 +195,9 @@ async def run():
                 continue
             existing.update(album.url, -1) # place holder
             result = await post_douban(channel, post, album, status_text)
-            if 'client' in client_cache: # testing
+            existing.update(album.url, result)
+            if 'client' in client_cache:
                 await client_cache['client'].disconnect()
-                return
-            if not result:
-                continue
-            existing.update(album.url, result.id)
-            await client_cache['client'].disconnect()
             return # only send one item every 10 minute
         
 if __name__ == '__main__':
