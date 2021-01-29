@@ -84,10 +84,6 @@ headers['referer'] = 'https://www.douban.com/'
 headers['origin'] = 'https://www.douban.com'
 headers['host'] = 'www.douban.com'
 
-def postDouban(status):
-    result = requests.post('https://www.douban.com/j/status/reshare', headers=headers, data={
-        'sid': status, 'ck': '3DCH', 'text': ''}) 
-
 def postMedia(fn):
     headers_copy = headers.copy()
     headers_copy['sec-ch-ua'] = '"Google Chrome";v="87", " Not;A Brand";v="99", "Chromium";v="87"'
@@ -104,17 +100,13 @@ def postMedia(fn):
     }
     boundary = '----WebKitFormBoundaryqvxBU8yBTb28YrZ8'
     m = MultipartEncoder(fields=fields, boundary=boundary)
-    print(m)
 
     headers_copy['Content-Type'] = m.content_type
 
     result = requests.post('https://www.douban.com/j/upload', 
         headers=headers_copy, 
         data=m)
-    print(result.content)
-    print(result.text)
-    print(result.json)
-    print(result)
+    return result.json()['url']
 
 async def getMediaSingle(post):
     fn = await post.download_media('tmp/')
@@ -186,7 +178,10 @@ async def post_douban(channel, post, album, status_text):
     if not media_ids and (album.video or album.imgs):
         print('all media upload failed: ', album.url)
         return
-    # post douban
+    result = requests.post('https://www.douban.com/', headers=headers, data={
+        'uploaded': '|'.join(media_ids), 'ck': '3DCH', 'comment': status_text}) 
+    print(result)
+    return result
     
 async def run():
     for channel in credential['channels']:
@@ -198,7 +193,7 @@ async def run():
             status_text = getText(album, post) or album.url
             if not matchLanguage(channel, status_text):
                 continue
-            # existing.update(album.url, -1) # place holder
+            existing.update(album.url, -1) # place holder
             result = await post_douban(channel, post, album, status_text)
             if 'client' in client_cache: # testing
                 await client_cache['client'].disconnect()
