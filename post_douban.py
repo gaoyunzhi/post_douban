@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 import cached_url
 import os
 import export_to_telegraph
-from telegram_util import isCN
+from telegram_util import isCN, matchKey
 import requests
 import base64
 from requests_toolbelt import MultipartEncoder
@@ -190,6 +190,9 @@ async def run():
                 continue
             status_text = getText(album, post) or album.url
             if not matchLanguage(channel, status_text):
+                continue
+            if matchKey(status_text, ['维吾尔']):
+                # 上次在豆瓣上发相关内容差点被永久封号。。。。
                 continue
             existing.update(album.url, -1) # place holder
             result = await post_douban(channel, post, album, status_text)
