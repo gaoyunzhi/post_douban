@@ -191,7 +191,7 @@ async def run():
             status_text = getText(album, post) or album.url
             if not matchLanguage(channel, status_text):
                 continue
-            if matchKey(status_text, ['维吾尔']):
+            if matchKey(status_text, ['维吾尔', '藏人', '西藏']):
                 # 上次在豆瓣上发相关内容差点被永久封号。。。。
                 continue
             existing.update(album.url, -1) # place holder
