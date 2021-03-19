@@ -93,7 +93,7 @@ def postMedia(fn):
     # print(request_body_template % fn[4:])
     fields = {
         'image': (fn[4:], open(fn, 'rb').read(), "image/" + fn.split('.')[-1]),
-        'ck': "IJ2z",
+        'ck': "qaJS",
         'upload_auth_token': auth_token,
     }
     boundary = '----WebKitFormBoundaryqvxBU8yBTb28YrZ8'
@@ -177,7 +177,7 @@ async def post_douban(channel, post, album, status_text):
         print('all media upload failed: ', album.url)
         return
     result = requests.post('https://www.douban.com/', headers=headers, data={
-        'uploaded': '|'.join(media_ids), 'ck': 'IJ2z', 'comment': status_text}) 
+        'uploaded': '|'.join(media_ids), 'ck': 'qaJS', 'comment': status_text}) 
     result = result.status_code
     return result
     
