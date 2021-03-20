@@ -193,8 +193,9 @@ async def run():
                 continue
             if matchKey(status_text, ['维吾尔', '藏人', '西藏', 
                 '我们今天需要的普世价值', '共同的经历和常识',
-                '新疆', '香港']):
+                '新疆', '香港', '藏语', '冬奥会']):
                 # 上次在豆瓣上发相关内容差点被永久封号。。。。
+                # 敏感词越来越多。。。
                 continue
             existing.update(album.url, -1) # place holder
             result = await post_douban(channel, post, album, status_text)
