@@ -71,6 +71,8 @@ with open('cookie') as f:
     cookie = f.read().strip()
 with open('auth_token') as f:
     auth_token = f.read().strip()
+with open('auth_key') as f:
+    auth_key = f.read().strip()
 with open('request_body_template') as f:
     request_body_template = f.read().strip()
 headers = {}
@@ -93,7 +95,7 @@ def postMedia(fn):
     # print(request_body_template % fn[4:])
     fields = {
         'image': (fn[4:], open(fn, 'rb').read(), "image/" + fn.split('.')[-1]),
-        'ck': "qaJS",
+        'ck': auth_key,
         'upload_auth_token': auth_token,
     }
     boundary = '----WebKitFormBoundaryqvxBU8yBTb28YrZ8'
@@ -177,7 +179,7 @@ async def post_douban(channel, post, album, status_text):
         print('all media upload failed: ', album.url)
         return
     result = requests.post('https://www.douban.com/', headers=headers, data={
-        'uploaded': '|'.join(media_ids), 'ck': 'qaJS', 'comment': status_text}) 
+        'uploaded': '|'.join(media_ids), 'ck': auth_key, 'comment': status_text}) 
     result = result.status_code
     return result
     
@@ -194,7 +196,8 @@ async def run():
             if matchKey(status_text, ['维吾尔', '藏人', '西藏', 
                 '我们今天需要的普世价值', '共同的经历和常识',
                 '新疆', '香港', '藏语', '冬奥会', '中俄的把持',
-                '人权律师']):
+                '人权律师', '抗争', '阴茎', '阴道', '警察', '反抗极权',
+                '国安', '政府屠杀', '军政府']):
                 # 上次在豆瓣上发相关内容差点被永久封号。。。。
                 # 敏感词越来越多。。。
                 continue
