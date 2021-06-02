@@ -106,7 +106,10 @@ def postMedia(fn):
     result = requests.post('https://www.douban.com/j/upload', 
         headers=headers_copy, 
         data=m)
-    return result.json()['url']
+    try:
+        return result.json()['url']
+    except Exception as e:
+        print('postMedia failed', fn, str(e), result.json())
 
 async def getMediaSingle(post):
     fn = await post.download_media('tmp/')
