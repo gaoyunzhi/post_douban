@@ -16,6 +16,7 @@ from telegram_util import isCN, matchKey
 import requests
 import base64
 from requests_toolbelt import MultipartEncoder
+import time
 
 with open('credential') as f:
     credential = yaml.load(f, Loader=yaml.FullLoader)
@@ -212,7 +213,8 @@ async def run():
             return # only send one item every 10 minute
         
 if __name__ == '__main__':
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    r = loop.run_until_complete(run())
-    loop.close()
+    if time.time() > 1623020633: # 被禁言了。。。
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        r = loop.run_until_complete(run())
+        loop.close()
