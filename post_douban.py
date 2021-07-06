@@ -184,7 +184,8 @@ async def post_douban(channel, post, album, status_text):
         return
     result = requests.post('https://www.douban.com/', headers=headers, data={
         'uploaded': '|'.join(media_ids), 'ck': auth_key, 'comment': status_text}) 
-    result = result.status_code or -1
+    try:
+        result = result.status_code or -1
     return result
     
 async def run():
