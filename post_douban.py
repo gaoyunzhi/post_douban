@@ -70,8 +70,6 @@ def getText(album, post):
 
 with open('cookie') as f:
     cookie = f.read().strip()
-with open('auth_token') as f:
-    auth_token = f.read().strip()
 with open('auth_key') as f:
     auth_key = f.read().strip()
 with open('request_body_template') as f:
@@ -97,7 +95,6 @@ def postMedia(fn):
     fields = {
         'image': (fn[4:], open(fn, 'rb').read(), "image/" + fn.split('.')[-1]),
         'ck': auth_key,
-        'upload_auth_token': auth_token,
     }
     boundary = '----WebKitFormBoundaryqvxBU8yBTb28YrZ8'
     m = MultipartEncoder(fields=fields, boundary=boundary)
@@ -185,8 +182,9 @@ async def post_douban(channel, post, album, status_text):
     result = requests.post('https://www.douban.com/', headers=headers, data={
         'uploaded': '|'.join(media_ids), 'ck': auth_key, 'comment': status_text}) 
     try:
-        result = result.status_code or -1
-    return result
+        return int(result.status_code)
+    except:
+        return -1
     
 async def run():
     for channel in credential['channels']:
